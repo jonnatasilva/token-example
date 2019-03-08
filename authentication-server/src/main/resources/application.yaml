@@ -1,0 +1,13 @@
+jdbc:
+  driverClassName: org.h2.Driver
+  url: jdbc:h2:~/data/oauth2;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;AUTO_SERVER=TRUE
+  user: sa
+  pass: sa
+
+spring:
+  h2.console.enabled: false
+  
+logging:
+  level:
+    org.springframework:
+      security: ERROR
