@@ -1,0 +1,25 @@
+plugins {
+	id 'org.springframework.boot' version '2.1.3.RELEASE'
+}
+
+subprojects {
+
+    apply plugin: 'java'
+    apply plugin: 'org.springframework.boot'
+    apply plugin: 'io.spring.dependency-management'
+    
+	group = 'com.jonnatas.token.example'
+	version = '0.0.1-SNAPSHOT'
+
+	sourceCompatibility = '1.8'
+
+	repositories {
+		mavenCentral()
+	}
+	
+	dependencies {
+		implementation 'org.springframework.boot:spring-boot-starter-web'
+		implementation 'org.springframework.boot:spring-boot-starter-security'
+		compile 'org.springframework.security.oauth:spring-security-oauth2:2.3.5.RELEASE'
+	}
+}
