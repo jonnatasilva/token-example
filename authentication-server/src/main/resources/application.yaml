@@ -5,9 +5,11 @@ jdbc:
   pass: sa
 
 spring:
-  h2.console.enabled: false
+  h2.console.enabled: true
+  profiles:
+    active: jwtTokenStore
   
 logging:
   level:
     org.springframework:
-      security: ERROR
+      security: DEBUG

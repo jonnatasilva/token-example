@@ -15,5 +15,4 @@ public class FooController {
 	public Foo findById(@PathVariable long id) {
 		return new Foo(1l, "foo");
 	}
-	
 }

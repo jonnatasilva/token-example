@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.security.oauth2.provider.token.RemoteTokenServices;
 
 @Configuration
-public class TokenStoreConfig {
+public class RemoteTokenServicesConfig {
 
 	@Value("${authentication.schema:http}")
 	private String authenticationSchema;

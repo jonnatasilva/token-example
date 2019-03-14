@@ -8,6 +8,12 @@ buildscript {
 		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}") 
 		classpath "org.springframework.cloud:spring-cloud-contract-gradle-plugin:${verifierVersion}"
 	}
+	
+	processResources {
+    from(sourceSets['main'].resources) {
+        exclude '**/*.jks'
+    }
+}
 }
 
 apply plugin: 'groovy'
@@ -20,6 +26,7 @@ repositories {
 dependencies {
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 	testCompile('org.springframework.cloud:spring-cloud-starter-contract-verifier')
+	compile('commons-io:commons-io:2.6')
 }
 
 dependencyManagement {
