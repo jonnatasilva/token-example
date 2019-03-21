@@ -13,3 +13,15 @@ logging:
   level:
     org.springframework:
       security: DEBUG
+ 
+application:
+  security:
+    keystore:
+      alias: mytest
+      path: mystore.jks
+      pass: mypass
+    token:
+      access.validity.seconds: 3600
+      refresh.validity.seconds: 36000
+   
+ 

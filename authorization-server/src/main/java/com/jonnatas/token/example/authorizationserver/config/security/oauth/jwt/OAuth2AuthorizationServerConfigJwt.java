@@ -1,9 +1,13 @@
-package com.jonnatas.token.example.authenticationserver.config;
+package com.jonnatas.token.example.authorizationserver.config.security.oauth.jwt;
+
+import static com.jonnatas.token.example.authorizationserver.config.Scopes.*;
+import static com.jonnatas.token.example.authorizationserver.config.GrantTypes.*;
 
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -24,12 +28,30 @@ import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenCo
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 import org.springframework.security.oauth2.provider.token.store.KeyStoreKeyFactory;
 
-import com.jonnatas.token.example.authenticationserver.token.CustomTokenEnhancer;
+import com.jonnatas.token.example.authorizationserver.token.CustomTokenEnhancer;
 
 @Configuration
 @EnableAuthorizationServer
 @Profile("jwtTokenStore")
 public class OAuth2AuthorizationServerConfigJwt extends AuthorizationServerConfigurerAdapter {
+
+	@Value("${application.security.token.access.validity.seconds: 3600}")
+	private Integer accessTokenValiditySeconds;
+	
+	@Value("${application.security.token.refresh.validity.seconds: 36000}")
+	private Integer refreshTokenValiditySeconds;
+	
+	@Value("${application.security.keystore.alias}")
+	private String keystoreAlias;
+	
+	@Value("${application.security.keystore.path}")
+	private String keystorePath;
+	
+	@Value("${application.security.keystore.pass}")
+	private String kestorePass;
+	
+	private static final String TOKEN_ACCESS_METHOD = "permitAll()";
+	private static final String CHECK_TOKEN_ACCESS_METHOD = "isAuthenticated()";
 
 	@Autowired
 	@Qualifier("authenticationManagerBean")
@@ -47,16 +69,25 @@ public class OAuth2AuthorizationServerConfigJwt extends AuthorizationServerConfi
 
 	@Override
 	public void configure(AuthorizationServerSecurityConfigurer oauthServer) throws Exception {
-		oauthServer.tokenKeyAccess("permitAll()").checkTokenAccess("isAuthenticated()");
+		oauthServer.tokenKeyAccess(TOKEN_ACCESS_METHOD).checkTokenAccess(CHECK_TOKEN_ACCESS_METHOD);
 	}
 
 	@Override
 	public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-		clients.inMemory().withClient("sampleClientId").authorizedGrantTypes("implicit").scopes("read")
-				.autoApprove(true).accessTokenValiditySeconds(3600).and().withClient("clientIdPassword")
-				.secret(passwordEncoder().encode("secret"))
-				.authorizedGrantTypes("password", "authorization_code", "refresh_token")
-				.scopes("read", "write", "trust").accessTokenValiditySeconds(60).refreshTokenValiditySeconds(600);
+		clients
+		.inMemory()
+			.withClient("sampleClientId")
+			.authorizedGrantTypes("implicit")
+			.scopes(READ.getName())
+			.autoApprove(true)
+			.accessTokenValiditySeconds(accessTokenValiditySeconds)
+		.and()
+			.withClient("clientIdPassword")
+			.secret(passwordEncoder().encode("secret"))
+			.authorizedGrantTypes(PASSWORD.getName(), AUTHORIZATION_CODE.getName(), REFRESH_CODE.getName())
+			.scopes(READ.getName())
+			.accessTokenValiditySeconds(accessTokenValiditySeconds)
+			.refreshTokenValiditySeconds(refreshTokenValiditySeconds);
 	}
 
 	@Bean
@@ -77,10 +108,11 @@ public class OAuth2AuthorizationServerConfigJwt extends AuthorizationServerConfi
 	@Bean
 	JwtAccessTokenConverter accessTokenConverter() {
 		JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
-		
-		KeyStoreKeyFactory keyStoreKeyFactory = new KeyStoreKeyFactory(new ClassPathResource("mystore.jks"), "mypass".toCharArray());
-		
-		converter.setKeyPair(keyStoreKeyFactory.getKeyPair("mytest"));
+
+		KeyStoreKeyFactory keyStoreKeyFactory = new KeyStoreKeyFactory(new ClassPathResource(keystorePath),
+				kestorePass.toCharArray());
+
+		converter.setKeyPair(keyStoreKeyFactory.getKeyPair(keystoreAlias));
 		return converter;
 	}
 

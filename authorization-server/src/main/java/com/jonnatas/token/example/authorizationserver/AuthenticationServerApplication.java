@@ -1,4 +1,4 @@
-package com.jonnatas.token.example.authenticationserver;
+package com.jonnatas.token.example.authorizationserver;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

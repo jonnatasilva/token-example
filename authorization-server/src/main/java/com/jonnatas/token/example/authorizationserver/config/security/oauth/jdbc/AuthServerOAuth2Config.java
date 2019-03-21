@@ -1,4 +1,4 @@
-package com.jonnatas.token.example.authenticationserver.config;
+package com.jonnatas.token.example.authorizationserver.config.security.oauth.jdbc;
 
 import javax.sql.DataSource;
 

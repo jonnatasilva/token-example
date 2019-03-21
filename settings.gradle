@@ -9,5 +9,5 @@
 
 rootProject.name = 'token-example'
 
-include 'authentication-server'
+include 'authorization-server'
 include 'resource-server'

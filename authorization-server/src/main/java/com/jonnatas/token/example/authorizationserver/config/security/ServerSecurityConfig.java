@@ -1,4 +1,4 @@
-package com.jonnatas.token.example.authenticationserver.config;
+package com.jonnatas.token.example.authorizationserver.config.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -28,9 +28,7 @@ public class ServerSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.authorizeRequests()
-			.antMatchers("/login").permitAll()
-			.and().formLogin().permitAll();
+		http.authorizeRequests().antMatchers("/login").permitAll().and().formLogin().permitAll();
 
 //		http.csrf().ignoringAntMatchers("/h2-console/*").disable();
 //		http.headers().frameOptions().disable();
