@@ -1,21 +1,18 @@
-# Authorizartion and resource server implementations example
+# Authorizartion server implementation
 
-This project is a simple application that implement token authorization.
+This project implements some concepts of OAuth2 protocol.
 
+There are two main projects:
+
+  - Authorization-server: It generates and checks token authorization. By default the token transmitted is using the JWT pattern.
+  - Resource-server: It exposes a resource used by some clients. To check the token the resource server sends a request to authorization server using the remote token service approach.
+  
 Project structure:
-  - token-example - project used to hold the sub-projects envolved on this example: 
+  - token-example: project used to hold the sub-projects envolved on this example: 
   
-    - authorization-server - application designed to hold authentication and authorization functionalities using OAuth2 protocol.
-  
-      The authorization-server enables an in memory user with the following credentials configuration:
-        - username: jhon
-        - password: 123
-        - role: USER
-      
-      The authorization token used by the client to acesss the resource server is transmitted using the JWT pattern, but is possible to use JDBC token changing the <spring.profiles.active property> from 'jwtTokenStore' to 'jbdcTokenStore'.
-      
-    - resource-server: resource server that exposes a simple resource if the token sent by client is authorizated by authorization-server. The token checking is requested to authorization-server using the remote  token service approach.
+    - authorization-server: application designed to hold authentication and authorization functionalities. 
+    - resource-server: application exposes a simple resource if the token sent by client is authorizated.
 
-Requiremts:
+Requirements:
   - jdk8
   - gradle 5.0
