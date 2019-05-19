@@ -1,7 +1,11 @@
 package com.jonnatas.token.example.authorizationserver.config.security.oauth.jwt;
 
-import static com.jonnatas.token.example.authorizationserver.config.Scopes.*;
-import static com.jonnatas.token.example.authorizationserver.config.GrantTypes.*;
+import static com.jonnatas.token.example.authorizationserver.config.GrantTypes.AUTHORIZATION_CODE;
+import static com.jonnatas.token.example.authorizationserver.config.GrantTypes.PASSWORD;
+import static com.jonnatas.token.example.authorizationserver.config.GrantTypes.REFRESH_CODE;
+import static com.jonnatas.token.example.authorizationserver.config.Scopes.DELETE;
+import static com.jonnatas.token.example.authorizationserver.config.Scopes.READ;
+import static com.jonnatas.token.example.authorizationserver.config.Scopes.WRITE;
 
 import java.util.Arrays;
 
@@ -37,19 +41,19 @@ public class OAuth2AuthorizationServerConfigJwt extends AuthorizationServerConfi
 
 	@Value("${application.security.token.access.validity.seconds: 3600}")
 	private Integer accessTokenValiditySeconds;
-	
+
 	@Value("${application.security.token.refresh.validity.seconds: 36000}")
 	private Integer refreshTokenValiditySeconds;
-	
+
 	@Value("${application.security.keystore.alias}")
 	private String keystoreAlias;
-	
+
 	@Value("${application.security.keystore.path}")
 	private String keystorePath;
-	
+
 	@Value("${application.security.keystore.pass}")
 	private String kestorePass;
-	
+
 	private static final String TOKEN_ACCESS_METHOD = "permitAll()";
 	private static final String CHECK_TOKEN_ACCESS_METHOD = "isAuthenticated()";
 
@@ -85,7 +89,8 @@ public class OAuth2AuthorizationServerConfigJwt extends AuthorizationServerConfi
 			.withClient("clientIdPassword")
 			.secret(passwordEncoder().encode("secret"))
 			.authorizedGrantTypes(PASSWORD.getName(), AUTHORIZATION_CODE.getName(), REFRESH_CODE.getName())
-			.scopes(READ.getName())
+			.scopes(READ.getName(), WRITE.getName(), DELETE.getName())
+			.redirectUris("http://localhost:8081/webjars/springfox-swagger-ui/oauth2-redirect.html")
 			.accessTokenValiditySeconds(accessTokenValiditySeconds)
 			.refreshTokenValiditySeconds(refreshTokenValiditySeconds);
 	}
